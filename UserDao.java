@@ -13,10 +13,10 @@ import javax.sql.DataSource;
  */
 
 public class UserDao {
-	
-	//DB 커넥션등의 기능을 쉽게할 수 있도록 도와주는 클래스.
+
+	// DB 커넥션등의 기능을 쉽게할 수 있도록 도와주는 클래스.
 	private DataSource dataSource;
-	
+
 //	private ConnectionMaker connectionMaker; // 초기에 설정하면 바뀔 일이 없지만,
 	// 왜냐하면 @Bean을 붙여만들었기 떄문에 이 자체도 싱글톤임.
 
@@ -27,17 +27,16 @@ public class UserDao {
 //				new AnnotationConfigApplicationContext(DaoFactory.class);
 //		this.connectionMaker = context.getBean("connectionMaker", ConnectionMaker.class);
 //	}
-	
+
 //	public void setConnectionMaker(ConnectionMaker connectionMaker) {
 //		this.connectionMaker = connectionMaker;
 //	}
-	
+
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
-	
-	
-	public void add(User user) throws ClassNotFoundException, SQLException {
+
+	public void add(User user) throws SQLException {
 		Connection c = dataSource.getConnection();
 
 		PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
@@ -51,8 +50,7 @@ public class UserDao {
 		c.close();
 	}
 
-
-	public User get(String id) throws ClassNotFoundException, SQLException {
+	public User get(String id) throws SQLException {
 		Connection c = dataSource.getConnection();
 
 		PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
@@ -71,5 +69,31 @@ public class UserDao {
 
 		return user;
 
+	}
+
+	public void deleteAll() throws SQLException {
+		Connection c = dataSource.getConnection();
+
+		PreparedStatement ps = c.prepareStatement("delete from users");
+		ps.executeUpdate();
+
+		ps.close();
+		c.close();
+	}
+
+	public int getCount() throws SQLException {
+		Connection c = dataSource.getConnection();
+
+		PreparedStatement ps = c.prepareStatement("select count(*) from users");
+		
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int count = rs.getInt(1);
+		
+		rs.close();
+		ps.close();
+		c.close();
+		
+		return count;
 	}
 }

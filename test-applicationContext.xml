@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	
+	<bean id="connectionMaker" class="DConnectionMaker"></bean>
+	<!-- CountingDaoFacotry와 DaoFactory의 connectionMaker 메서드 이름이 같아서 두개 구부을 못하는데? -->
+	
+	<bean id="userDao" class="UserDao">
+	<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+	<property name="driverClass" value="com.mysql.cj.jdbc.Driver"/>
+	<property name="url" value="jdbc:mysql://localhost/testdb?serverTimezone=UTC&amp;useSSL=false"/>
+	<!-- XML에선 &를 &amp; 로 바꿔줘야함 -->
+	<property name="username" value="spring"/>
+	<property name="password" value="book"/>
+	</bean>
+
+
+</beans>

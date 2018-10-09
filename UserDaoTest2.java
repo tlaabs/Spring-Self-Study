@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 //JUnit이 사용하는 애플리케이션 컨텍스트를 만들고 관리하는 작업을 진행해줌.
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/applicationContext.xml")
+@ContextConfiguration(locations = "/test-applicationContext.xml")
 //테스트에서 context의 구성이나 상태를 변경한다는 것을 테스트 컨텍스트 프레임워크에 알려줌.
 @DirtiesContext
 public class UserDaoTest2 {

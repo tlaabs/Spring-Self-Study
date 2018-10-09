@@ -3,14 +3,11 @@ import static org.junit.Assert.assertThat;
 
 import java.sql.SQLException;
 
-import javax.sql.DataSource;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -20,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = "/applicationContext.xml")
 //테스트에서 context의 구성이나 상태를 변경한다는 것을 테스트 컨텍스트 프레임워크에 알려줌.
 @DirtiesContext
-public class UserDaoTest {
+public class UserDaoTest2 {
 //  타입 -> 변수 이름 -> 예외 발생
 	@Autowired
 	private ApplicationContext context;
@@ -32,17 +29,16 @@ public class UserDaoTest {
 
 	@Before
 	public void setUp() {
-//		ApplicationContext context = new GenericXmlApplicationContext(
-//				"applicationContext.xml");
 		System.out.println(context);
 		System.out.println(dao);
+//		ApplicationContext context = new GenericXmlApplicationContext(
+//				"applicationContext.xml");
 		// 중복 메서드 문제가생기면?
-		
-		dao = context.getBean("userDao", UserDao.class);
+//		dao = context.getBean("userDao", UserDao.class);
 
-		DataSource dataSource = new SingleConnectionDataSource(
-				"jdbc:mysql://localhost/testdb?serverTimezone=UTC&useSSL=false", "spring", "book", true);
-		dao.setDataSource(dataSource);
+//		DataSource dataSource = new SingleConnectionDataSource(
+//				"jdbc:mysql://localhost/testdb?serverTimezone=UTC&useSSL=false", "spring", "book", true);
+//		dao.setDataSource(dataSource);
 		
 		user1 = new User("gyumee", "박성철", "springno1");
 		user2 = new User("leggw700", "이길원", "springno2");
@@ -73,7 +69,9 @@ public class UserDaoTest {
 //	}
 
 //	@Test
-	public void count() throws SQLException {		
+	public void count() throws SQLException {
+		System.out.println(context);
+		System.out.println(dao);		
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
 

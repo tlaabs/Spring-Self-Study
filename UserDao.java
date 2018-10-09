@@ -6,6 +6,8 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+
 /*
  * 작성자 : 심세용
  * 업데이트 : 2018-10-04
@@ -57,15 +59,20 @@ public class UserDao {
 		ps.setString(1, id);
 
 		ResultSet rs = ps.executeQuery();
-		rs.next();
-		User user = new User();
-		user.setId(rs.getString("id"));
-		user.setName(rs.getString("name"));
-		user.setPassword(rs.getString("password"));
-
+		User user = null;
+		
+		if (rs.next()) {
+			user = new User();
+			user.setId(rs.getString("id"));
+			user.setName(rs.getString("name"));
+			user.setPassword(rs.getString("password"));
+		}
+		
 		rs.close();
 		ps.close();
 		c.close();
+		
+		if(user == null) throw new EmptyResultDataAccessException(1);
 
 		return user;
 
@@ -85,15 +92,15 @@ public class UserDao {
 		Connection c = dataSource.getConnection();
 
 		PreparedStatement ps = c.prepareStatement("select count(*) from users");
-		
+
 		ResultSet rs = ps.executeQuery();
 		rs.next();
 		int count = rs.getInt(1);
-		
+
 		rs.close();
 		ps.close();
 		c.close();
-		
+
 		return count;
 	}
 }

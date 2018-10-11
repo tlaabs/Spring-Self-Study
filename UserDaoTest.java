@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -72,7 +73,7 @@ public class UserDaoTest {
 //		JUnitCore.main("UserDaoTest");
 //	}
 
-//	@Test
+	@Test
 	public void count() throws SQLException {		
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));
@@ -88,7 +89,7 @@ public class UserDaoTest {
 
 	}
 
-//	@Test(expected = EmptyResultDataAccessException.class)
+	@Test(expected = EmptyResultDataAccessException.class)
 	public void getUserFailure() throws SQLException {
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));

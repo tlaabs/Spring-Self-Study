@@ -9,22 +9,23 @@ import javax.sql.DataSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 /*
- * ÀÛ¼ºÀÚ : ½É¼¼¿ë
- * ¾÷µ¥ÀÌÆ® : 2018-10-04
- * ¼³¸í : ÃÊ³­°¨ DAO
+ * ï¿½Û¼ï¿½ï¿½ï¿½ : ï¿½É¼ï¿½ï¿½ï¿½
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® : 2018-10-04
+ * ï¿½ï¿½ï¿½ï¿½ : ï¿½Ê³ï¿½ï¿½ï¿½ DAO
  */
 
 public class UserDao {
 
-	// DB Ä¿³Ø¼ÇµîÀÇ ±â´ÉÀ» ½±°ÔÇÒ ¼ö ÀÖµµ·Ï µµ¿ÍÁÖ´Â Å¬·¡½º.
+	// DB Ä¿ï¿½Ø¼Çµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Öµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½.
 	private DataSource dataSource;
-
-//	private ConnectionMaker connectionMaker; // ÃÊ±â¿¡ ¼³Á¤ÇÏ¸é ¹Ù²ð ÀÏÀÌ ¾øÁö¸¸,
-	// ¿Ö³ÄÇÏ¸é @BeanÀ» ºÙ¿©¸¸µé¾ú±â ‹š¹®¿¡ ÀÌ ÀÚÃ¼µµ ½Ì±ÛÅæÀÓ.
+	
+	private JdbcContext jdbcContext;
+//	private ConnectionMaker connectionMaker; // ï¿½Ê±â¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½Ù²ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,
+	// ï¿½Ö³ï¿½ï¿½Ï¸ï¿½ @Beanï¿½ï¿½ ï¿½Ù¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ì±ï¿½ï¿½ï¿½ï¿½ï¿½.
 
 //	public UserDao(ConnectionMaker connectionMaker) {
 //		this.connectionMaker = connectionMaker;
-// ÀÇÁ¸°ü°è °Ë»ö
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
 //		AnnotationConfigApplicationContext context =
 //				new AnnotationConfigApplicationContext(DaoFactory.class);
 //		this.connectionMaker = context.getBean("connectionMaker", ConnectionMaker.class);
@@ -37,9 +38,13 @@ public class UserDao {
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
+	
+	public void setJdbcContext(JdbcContext jdbcContext) {
+		this.jdbcContext = jdbcContext;
+	}
 
 	public void add(User user) throws SQLException {
-		jdbcContextWithStatementStrategy(new StatementStrategy() {
+		this.jdbcContext.workWithStatementStrategy(new StatementStrategy() {
 			@Override
 			public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
 				// TODO Auto-generated method stub
@@ -82,37 +87,17 @@ public class UserDao {
 	}
 
 	public void deleteAll() throws SQLException {
-		StatementStrategy st = new DeleteAllStatement();
-		jdbcContextWithStatementStrategy(st);
+		this.jdbcContext.workWithStatementStrategy(new StatementStrategy() {
+			@Override
+			public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+				// TODO Auto-generated method stub
+				PreparedStatement ps = c.prepareStatement("delete from users");
+				return ps;
+			}
+		});
 	}
 
-	public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
-		Connection c = null;
-		PreparedStatement ps = null;
-
-		try {
-			c = dataSource.getConnection();
-
-			ps = stmt.makePreparedStatement(c);
-
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			throw e;
-		} finally {
-			if (ps != null) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
-				}
-			}
-			if (c != null) {
-				try {
-					c.close();
-				} catch (SQLException e) {
-				}
-			}
-		}
-	}
+	
 
 	public int getCount() throws SQLException {
 		Connection c = null;

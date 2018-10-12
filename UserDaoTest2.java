@@ -8,17 +8,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-//JUnitÀÌ »ç¿ëÇÏ´Â ¾ÖÇÃ¸®ÄÉÀÌ¼Ç ÄÁÅØ½ºÆ®¸¦ ¸¸µé°í °ü¸®ÇÏ´Â ÀÛ¾÷À» ÁøÇàÇØÁÜ.
+//JUnitï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½Ø½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Û¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
-//Å×½ºÆ®¿¡¼­ contextÀÇ ±¸¼ºÀÌ³ª »óÅÂ¸¦ º¯°æÇÑ´Ù´Â °ÍÀ» Å×½ºÆ® ÄÁÅØ½ºÆ® ÇÁ·¹ÀÓ¿öÅ©¿¡ ¾Ë·ÁÁÜ.
+//ï¿½×½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ contextï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ® ï¿½ï¿½ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½Å©ï¿½ï¿½ ï¿½Ë·ï¿½ï¿½ï¿½.
 @DirtiesContext
 public class UserDaoTest2 {
-//  Å¸ÀÔ -> º¯¼ö ÀÌ¸§ -> ¿¹¿Ü ¹ß»ı
+//  Å¸ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ -> ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½
 	@Autowired
 	private ApplicationContext context;
 	@Autowired
@@ -33,16 +34,16 @@ public class UserDaoTest2 {
 		System.out.println(dao);
 //		ApplicationContext context = new GenericXmlApplicationContext(
 //				"applicationContext.xml");
-		// Áßº¹ ¸Ş¼­µå ¹®Á¦°¡»ı±â¸é?
+		// ï¿½ßºï¿½ ï¿½Ş¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 //		dao = context.getBean("userDao", UserDao.class);
 
 //		DataSource dataSource = new SingleConnectionDataSource(
 //				"jdbc:mysql://localhost/testdb?serverTimezone=UTC&useSSL=false", "spring", "book", true);
 //		dao.setDataSource(dataSource);
 		
-		user1 = new User("gyumee", "¹Ú¼ºÃ¶", "springno1");
-		user2 = new User("leggw700", "ÀÌ±æ¿ø", "springno2");
-		user3 = new User("bumjin", "¹Ú¹üÁø", "springno3");
+		user1 = new User("gyumee", "ã…ã„»ã„¹", "springno1");
+		user2 = new User("leggw700", "ã…ã„´ã…‡ã„¹", "springno2");
+		user3 = new User("bumjin", "ã…ã„´ã…‡ã„¹", "springno3");
 	}
 
 	@Test
@@ -68,7 +69,7 @@ public class UserDaoTest2 {
 //		JUnitCore.main("UserDaoTest");
 //	}
 
-//	@Test
+	@Test
 	public void count() throws SQLException {
 		System.out.println(context);
 		System.out.println(dao);		
@@ -86,7 +87,7 @@ public class UserDaoTest2 {
 
 	}
 
-//	@Test(expected = EmptyResultDataAccessException.class)
+	@Test(expected = EmptyResultDataAccessException.class)
 	public void getUserFailure() throws SQLException {
 		dao.deleteAll();
 		assertThat(dao.getCount(), is(0));

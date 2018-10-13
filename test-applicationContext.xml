@@ -8,7 +8,7 @@
 	<!-- CountingDaoFacotry와 DaoFactory의 connectionMaker 메서드 이름이 같아서 두개 구부을 
 		못하는데? -->
 
-	<bean id="userDao" class="UserDao">
+	<bean id="userDao" class="UserDaoJdbc">
 		<property name="dataSource" ref="dataSource" />
 	
 	</bean>

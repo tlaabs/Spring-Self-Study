@@ -1,4 +1,4 @@
-public class UserDaoDeleteAll extends UserDao{
+public class UserDaoDeleteAll extends UserDaoJdbc{
 
 //	@Override
 //	protected PreparedStatement makeStatement(Connection c) throws SQLException {

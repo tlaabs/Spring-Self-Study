@@ -16,17 +16,17 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-//JUnitÀÌ »ç¿ëÇÏ´Â ¾ÖÇÃ¸®ÄÉÀÌ¼Ç ÄÁÅØ½ºÆ®¸¦ ¸¸µé°í °ü¸®ÇÏ´Â ÀÛ¾÷À» ÁøÇàÇØÁÜ.
+//JUnitï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½Ø½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Û¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/applicationContext.xml")
-//Å×½ºÆ®¿¡¼­ contextÀÇ ±¸¼ºÀÌ³ª »óÅÂ¸¦ º¯°æÇÑ´Ù´Â °ÍÀ» Å×½ºÆ® ÄÁÅØ½ºÆ® ÇÁ·¹ÀÓ¿öÅ©¿¡ ¾Ë·ÁÁÜ.
+//ï¿½×½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ contextï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ® ï¿½ï¿½ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½Å©ï¿½ï¿½ ï¿½Ë·ï¿½ï¿½ï¿½.
 @DirtiesContext
 public class UserDaoTest {
-//  Å¸ÀÔ -> º¯¼ö ÀÌ¸§ -> ¿¹¿Ü ¹ß»ý
+//  Å¸ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ -> ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½
 	@Autowired
 	private ApplicationContext context;
 	@Autowired
-	private UserDao dao;
+	private UserDaoJdbc dao;
 	private User user1;
 	private User user2;
 	private User user3;
@@ -37,17 +37,18 @@ public class UserDaoTest {
 //				"applicationContext.xml");
 		System.out.println(context);
 		System.out.println(dao);
-		// Áßº¹ ¸Þ¼­µå ¹®Á¦°¡»ý±â¸é?
+		// ï¿½ßºï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 		
-		dao = context.getBean("userDao", UserDao.class);
+		dao = context.getBean("userDao", UserDaoJdbc.class);
 
 		DataSource dataSource = new SingleConnectionDataSource(
 				"jdbc:mysql://localhost/testdb?serverTimezone=UTC&useSSL=false", "spring", "book", true);
 		dao.setDataSource(dataSource);
 		
-		user1 = new User("gyumee", "¹Ú¼ºÃ¶", "springno1");
-		user2 = new User("leggw700", "ÀÌ±æ¿ø", "springno2");
-		user3 = new User("bumjin", "¹Ú¹üÁø", "springno3");
+		user1 = new User("gyumee", "ï¿½Ú¼ï¿½Ã¶", "springno1");
+		user2 = new User("gyumee", "ï¿½Ú¼ï¿½Ã¶", "springno1");
+//		user2 = new User("leggw700", "ï¿½Ì±ï¿½ï¿½", "springno2");
+		user3 = new User("bumjin", "ï¿½Ú¹ï¿½ï¿½ï¿½", "springno3");
 	}
 
 	@Test

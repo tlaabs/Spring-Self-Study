@@ -1,3 +1,4 @@
+package springbook.user.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,23 +19,39 @@ public class UserDaoJdbc implements UserDao{
 
 	private JdbcTemplate jdbcTemplate;
 
+	//ResultSet의 row를 조회하여 유저정보를 User 클래스에 담아서 리턴함.
 	private RowMapper<User> userMapper = new RowMapper<User>() {
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			User user = new User();
 			user.setId(rs.getString("id"));
 			user.setName(rs.getString("name"));
 			user.setPassword(rs.getString("password"));
+			user.setLevel(Level.valueOf(rs.getInt("level")));
+			user.setLogin(rs.getInt("login"));
+			user.setRecommend(rs.getInt("recommend"));
 			return user;
 		}
 	};
+	
+	@Override
+	public void update(User user) {
+		// TODO Auto-generated method stub
+		this.jdbcTemplate.update("update users set name = ?, password = ?, level = ?, login = ?, " +
+		"recommend = ? where id = ? ", user.getName(), user.getPassword(),
+		user.getLevel().intValue(), user.getLogin(), user.getRecommend(),
+		user.getId());
+	}
 
 	public void setDataSource(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
 	public void add(User user){
-		this.jdbcTemplate.update("insert into users(id, name, password) values(?,?,?)", user.getId(), user.getName(),
-				user.getPassword());
+		this.jdbcTemplate.update("insert into users(id, name, password, level, login, recommend) "
+				+ "values(?,?,?,?,?,?)", user.getId(), user.getName(),
+				user.getPassword(), user.getLevel().intValue(),
+				user.getLogin(), user.getRecommend());
+		//getLevel은 Enum 타입, DB에 저장될 수 있는 SQL 타입이 아니므로 정수형으로 변환해줘야 한다.
 	}
 
 	public User get(String id) {

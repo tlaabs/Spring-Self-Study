@@ -1,3 +1,4 @@
+package springbook.user.dao;
 
 public class DuplicateUserIdException extends RuntimeException {
 	

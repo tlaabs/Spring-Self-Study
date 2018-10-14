@@ -1,3 +1,4 @@
+package springbook.user.dao;
 import java.util.List;
 
 public interface UserDao {
@@ -6,4 +7,5 @@ public interface UserDao {
 	List<User> getAll();
 	void deleteAll();
 	int getCount();
+	public void update(User user1);
 }

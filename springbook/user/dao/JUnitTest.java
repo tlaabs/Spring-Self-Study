@@ -1,3 +1,4 @@
+package springbook.user.dao;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -22,7 +23,7 @@ public class JUnitTest {
 	@Autowired
 	ApplicationContext context;
 	
-	//¸Å½ÇÇà¶§ ¸¶´Ù ÀÎ½ºÅÏ½º¸¦ »õ·Ó°Ô ¸¸µë
+	//ï¿½Å½ï¿½ï¿½à¶§ ï¿½ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ó°ï¿½ ï¿½ï¿½ï¿½ï¿½
 	static Set<JUnitTest> testObjects = new HashSet<JUnitTest>();
 	static ApplicationContext contextObject = null;
 	

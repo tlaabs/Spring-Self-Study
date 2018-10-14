@@ -1,3 +1,4 @@
+package springbook.user.dao;
 
 public class User {
 //	private static final int BASIC = 1;

@@ -4,13 +4,13 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<bean id="connectionMaker" class="DConnectionMaker"></bean>
+	<bean id="connectionMaker" class="springbook.user.dao.DConnectionMaker"></bean>
 	<!-- CountingDaoFacotry와 DaoFactory의 connectionMaker 메서드 이름이 같아서 두개 구부을 
 		못하는데? -->
 
-	<bean id="userDao" class="UserDaoJdbc">
+	<bean id="userDao" class="springbook.user.dao.UserDaoJdbc">
 		<property name="dataSource" ref="dataSource" />
-	
+
 	</bean>
 
 	<bean id="dataSource"
@@ -21,6 +21,10 @@
 		<!-- XML에선 &를 &amp; 로 바꿔줘야함 -->
 		<property name="username" value="spring" />
 		<property name="password" value="book" />
+	</bean>
+
+	<bean id="userService" class="springbook.user.service.UserService">
+		<property name="userDao" ref="userDao" />
 	</bean>
 
 

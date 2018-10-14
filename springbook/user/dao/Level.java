@@ -1,3 +1,4 @@
+package springbook.user.dao;
 
 public enum Level {
 	//클래스와 비교했을 때 Enum이 가지는 장점이? 타입체크 가능.

@@ -1,14 +1,15 @@
+package springbook.user.dao;
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
-//Application Context°¡ »ç¿ëÇÒ ¼³Á¤Á¤º¸¶ó´Â Ç¥½Ã
+//Application Contextï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½
 @Configuration
 public class DaoFactory {
 	
-//	@Bean //¿ÀºêÁ§Æ® »ý¼ºÀ» ´ã´çÇÏ´Â IoC¿ë ¸Þ¼Òµå¶ó´Â Ç¥½Ã
+//	@Bean //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ IoCï¿½ï¿½ ï¿½Þ¼Òµï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½
 //	public UserDao userDao() {
 //		UserDao userDao = new UserDao();
 //		userDao.setDataSource(dataSource());

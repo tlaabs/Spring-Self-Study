@@ -45,10 +45,10 @@ public class UserDaoTest {
 				"jdbc:mysql://localhost/testdb?serverTimezone=UTC&useSSL=false", "spring", "book", true);
 		dao.setDataSource(dataSource);
 		
-		user1 = new User("gyumee", "�ڼ�ö", "springno1");
-		user2 = new User("gyumee", "�ڼ�ö", "springno1");
-//		user2 = new User("leggw700", "�̱��", "springno2");
-		user3 = new User("bumjin", "�ڹ���", "springno3");
+		user1 = new User("gyumee", "심세용", "springno1",Level.BASIC,1,0);
+		user2 = new User("leggw700", "심네용", "springno2",Level.SILVER,55,10);
+		user3 = new User("bumjin", "심오용", "springno3",Level.GOLD,100,40);
+		
 	}
 
 	@Test

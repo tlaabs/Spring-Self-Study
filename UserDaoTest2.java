@@ -50,9 +50,10 @@ public class UserDaoTest2 {
 //				"jdbc:mysql://localhost/testdb?serverTimezone=UTC&useSSL=false", "spring", "book", true);
 //		dao.setDataSource(dataSource);
 		
-		user1 = new User("gyumee", "심세용", "springno1");
-		user2 = new User("leggw700", "심네용", "springno2");
-		user3 = new User("bumjin", "심오용", "springno3");
+		user1 = new User("gyumee", "심세용", "springno1",Level.BASIC,1,0);
+		user2 = new User("leggw700", "심네용", "springno2",Level.SILVER,55,10);
+		user3 = new User("bumjin", "심오용", "springno3",Level.GOLD,100,40);
+		
 	}
 
 	@Test
@@ -66,12 +67,10 @@ public class UserDaoTest2 {
 		assertThat(dao.getCount(), is(2));
 
 		User userget1 = dao.get(user1.getId());
-		assertThat(userget1.getName(), is(user1.getName()));
-		assertThat(userget1.getPassword(), is(user1.getPassword()));
+		checkSameUser(userget1, user1);
 
 		User userget2 = dao.get(user2.getId());
-		assertThat(userget2.getName(), is(user2.getName()));
-		assertThat(userget2.getPassword(), is(user2.getPassword()));
+		checkSameUser(userget2, user2);
 	}
 	
 	@Test
@@ -105,6 +104,11 @@ public class UserDaoTest2 {
 		assertThat(user1.getId(), is(user2.getId()));
 		assertThat(user1.getName(), is(user2.getName()));
 		assertThat(user1.getPassword(), is(user2.getPassword()));
+		assertThat(user1.getLevel(), is(user2.getLevel()));
+		assertThat(user1.getLogin(), is(user2.getLogin()));
+		assertThat(user1.getRecommend(), is(user2.getRecommend()));
+		
+		
 	}
 
 	@Test
@@ -153,6 +157,7 @@ public class UserDaoTest2 {
 			dao.add(user1);
 		}
 		catch(DuplicateKeyException ex) {
+			//getRootCause - 중첩되어 있는 SQLException 가져올 수 있다.
 			SQLException sqlEx = (SQLException)ex.getRootCause();
 			SQLExceptionTranslator set =
 					new SQLErrorCodeSQLExceptionTranslator(this.dataSource);

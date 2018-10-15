@@ -22,9 +22,12 @@
 		<property name="username" value="spring" />
 		<property name="password" value="book" />
 	</bean>
+	
+	<bean id="levelPolicy" class="springbook.user.service.CommonUserLevelUpgradePolicy"/>
 
 	<bean id="userService" class="springbook.user.service.UserService">
 		<property name="userDao" ref="userDao" />
+		<property name="levelPolicy" ref="levelPolicy"/>
 	</bean>
 
 

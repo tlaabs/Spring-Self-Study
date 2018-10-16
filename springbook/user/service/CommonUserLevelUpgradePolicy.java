@@ -14,6 +14,10 @@ public class CommonUserLevelUpgradePolicy implements UserLevelUpgradePolicy {
 	@Autowired
 	private UserDao userDao;
 
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
+
 	@Override
 	public boolean canUpgradeLevel(User user) {
 		// TODO Auto-generated method stub

@@ -1,5 +1,4 @@
 package springbook.user.dao;
-import java.sql.Connection;
 import java.util.List;
 
 public interface UserDao {
@@ -9,10 +8,10 @@ public interface UserDao {
 	 * 테스트 코드까지 변질되었다.
 	 */
 	
-	void add(Connection c, User user);
-	User get(Connection c, String id);
+	void add(User user);
+	User get(String id);
 	List<User> getAll();
 	void deleteAll();
 	int getCount();
-	public void update(Connection c, User user1);
+	public void update(User user1);
 }

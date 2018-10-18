@@ -10,6 +10,8 @@ import static springbook.user.service.UserService.MIN_RECOMMEND_FOR_GOLD;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +29,9 @@ import springbook.user.service.TestUserService.TestUserServiceException;
 public class UserServiceTest {
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	DataSource dataSource;
 	
 	@Autowired
 	UserDao userDao;
@@ -49,7 +54,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void upgradeLevels() {
+	public void upgradeLevels() throws Exception{
 		userDao.deleteAll();
 		
 		for(User user : users) userDao.add(user);
@@ -103,12 +108,13 @@ public class UserServiceTest {
 	
 //	모 아니면 도
 	@Test
-	public void upgradeAllOrNothing() {
+	public void upgradeAllOrNothing() throws Exception{
 		UserService testUserService = new TestUserService(users.get(3).getId());
 		testUserService.setUserDao(this.userDao);
 		CommonUserLevelUpgradePolicy policy = new CommonUserLevelUpgradePolicy();
 		policy.setUserDao(userDao);
 		testUserService.setLevelPolicy(policy);
+		testUserService.setDataSource(this.dataSource);
 		
 		userDao.deleteAll();
 		for(User user : users) userDao.add(user);
@@ -121,7 +127,7 @@ public class UserServiceTest {
 		}
 	
 		//업데이트가 안됬을 것이다. 예상
-		checkLevelUpgraded(users.get(1), true);
+		checkLevelUpgraded(users.get(1), false);
 		
 	}
 }

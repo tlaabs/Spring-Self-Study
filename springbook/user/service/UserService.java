@@ -1,12 +1,12 @@
 package springbook.user.service;
 
-import java.sql.Connection;
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import springbook.user.dao.Level;
 import springbook.user.dao.User;
@@ -22,6 +22,8 @@ public class UserService {
 
 	private DataSource dataSource;
 
+	private PlatformTransactionManager transactionManager;
+
 	UserLevelUpgradePolicy levelPolicy;
 
 	public void setUserDao(UserDao userDao) {
@@ -36,6 +38,10 @@ public class UserService {
 		this.dataSource = dataSource;
 	}
 
+	public void setTransactionManager(PlatformTransactionManager transactionManager) {
+		this.transactionManager = transactionManager;
+	}
+
 	// Policy 적용
 	public void upgradeLevels() throws Exception{
 		/**
@@ -45,11 +51,14 @@ public class UserService {
 		 * 멀티스레드 환경에서 공유하는 인스턴스 변수에 정보를 저장하다가는 서로 덮어쓰는 일이 발생할 수 있다.
 		 */
 		
-		TransactionSynchronizationManager.initSynchronization();
-		//DB 커넥션 생성과 동기화를 함께 해주는 유틸리티 메서드
-		//트랜잭션 동기화에 사용하도록 저장소에 바인딩까지 해줌.
-		Connection c = DataSourceUtils.getConnection(dataSource);
-		c.setAutoCommit(false);
+		/**
+		 * JTA를 사용하면 하나 이상의 DB가 참여하는 트랙잭션을 만들 수 있다.
+		 * 별로의 트랜잭션 관리자를 통해 글로벌 트랙잭션을 구성
+		 * JDBC의 Connection을 이용한 로컬 트랙잭션은 하나의 DB만 종속된다.
+		 */
+
+		TransactionStatus status =
+				this.transactionManager.getTransaction(new DefaultTransactionDefinition());
 		
 		try {
 		List<User> users = userDao.getAll();
@@ -58,14 +67,10 @@ public class UserService {
 				upgradeLevel(user);
 			}
 		}
-		c.commit();
+		this.transactionManager.commit(status);
 		}catch(Exception e) {
-			c.rollback();
+			this.transactionManager.rollback(status);
 			throw e;
-		}finally {
-			DataSourceUtils.releaseConnection(c, dataSource);
-			TransactionSynchronizationManager.unbindResource(this.dataSource);
-			TransactionSynchronizationManager.clearSynchronization();
 		}
 
 	}

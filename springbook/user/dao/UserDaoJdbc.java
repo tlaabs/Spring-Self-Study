@@ -9,12 +9,6 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-/*
- * �ۼ��� : �ɼ���
- * ������Ʈ : 2018-10-04
- * ���� : �ʳ��� DAO
- */
-
 public class UserDaoJdbc implements UserDao{
 
 	private JdbcTemplate jdbcTemplate;

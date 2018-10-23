@@ -5,8 +5,7 @@ public class Main {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException{
 		// TODO Auto-generated method stub
-//		UserDao dao = new UserDao();
-//		
+//		UserDao dao = new UserDao();	
 //		User user = new User();
 //		user.setId("whiteship");
 //		user.setName("��⼱");

@@ -10,8 +10,7 @@ public class Main {
 //		user.setId("whiteship");
 //		user.setName("��⼱");
 //		user.setPassword("married");
-//		dao.add(user);
-//		
+//		dao.add(user);	
 //		System.out.println(user.getId() + " ��� ����");
 //		
 //		User user2 = dao.get(user.getId());

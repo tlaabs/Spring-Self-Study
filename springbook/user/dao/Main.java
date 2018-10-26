@@ -12,7 +12,6 @@ public class Main {
 //		user.setPassword("married");
 //		dao.add(user);	
 //		System.out.println(user.getId() + " ��� ����");
-//		
 //		User user2 = dao.get(user.getId());
 //		System.out.println(user2.getName());
 //		System.out.println(user2.getPassword());

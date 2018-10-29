@@ -23,6 +23,7 @@ public class UserDaoJdbc implements UserDao{
 			user.setLevel(Level.valueOf(rs.getInt("level")));
 			user.setLogin(rs.getInt("login"));
 			user.setRecommend(rs.getInt("recommend"));
+			user.setEmail(rs.getString("email"));
 			return user;
 		}
 	};
@@ -32,8 +33,8 @@ public class UserDaoJdbc implements UserDao{
 		// TODO Auto-generated method stub
 		//JdbcTemplate을 더 이상 활용할 수 없다. jdbcTemplate 내부에서 커넥션이 모두 끝나기때문에 서비스 영역에서 트랜잭션을 수행할 수 없다.
 		this.jdbcTemplate.update("update users set name = ?, password = ?, level = ?, login = ?, " +
-		"recommend = ? where id = ? ", user.getName(), user.getPassword(),
-		user.getLevel().intValue(), user.getLogin(), user.getRecommend(),
+		"recommend = ?, email = ? where id = ? ", user.getName(), user.getPassword(),
+		user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail(),
 		user.getId());
 	}
 
@@ -42,10 +43,10 @@ public class UserDaoJdbc implements UserDao{
 	}
 
 	public void add(User user){
-		this.jdbcTemplate.update("insert into users(id, name, password, level, login, recommend) "
-				+ "values(?,?,?,?,?,?)", user.getId(), user.getName(),
+		this.jdbcTemplate.update("insert into users(id, name, password, level, login, recommend, email) "
+				+ "values(?,?,?,?,?,?,?)", user.getId(), user.getName(),
 				user.getPassword(), user.getLevel().intValue(),
-				user.getLogin(), user.getRecommend());
+				user.getLogin(), user.getRecommend(), user.getEmail());
 		//getLevel은 Enum 타입, DB에 저장될 수 있는 SQL 타입이 아니므로 정수형으로 변환해줘야 한다.
 	}
 

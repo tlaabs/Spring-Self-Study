@@ -46,9 +46,9 @@ public class UserDaoTest {
 				"jdbc:mysql://localhost/testdb?serverTimezone=UTC&useSSL=false", "spring", "book", true);
 		dao.setDataSource(dataSource);
 		
-		user1 = new User("gyumee", "심세용", "springno1",Level.BASIC,1,0);
-		user2 = new User("leggw700", "심네용", "springno2",Level.SILVER,55,10);
-		user3 = new User("bumjin", "심오용", "springno3",Level.GOLD,100,40);
+		user1 = new User("gyumee", "심세용", "springno1",Level.BASIC,1,0,"gyumee@naver.com");
+		user2 = new User("leggw700", "심네용", "springno2",Level.SILVER,55,10,"leggw700@naver.com");
+		user3 = new User("bumjin", "심오용", "springno3",Level.GOLD,100,40,"bumjin@naver.com");
 		
 	}
 
@@ -65,10 +65,12 @@ public class UserDaoTest {
 		User userget1 = dao.get(user1.getId());
 		assertThat(userget1.getName(), is(user1.getName()));
 		assertThat(userget1.getPassword(), is(user1.getPassword()));
-
+		assertThat(userget1.getEmail(), is(user1.getEmail()));
+		
 		User userget2 = dao.get(user2.getId());
 		assertThat(userget2.getName(), is(user2.getName()));
 		assertThat(userget2.getPassword(), is(user2.getPassword()));
+		assertThat(userget2.getEmail(), is(user2.getEmail()));
 	}
 
 //	public static void main(String args[]) {

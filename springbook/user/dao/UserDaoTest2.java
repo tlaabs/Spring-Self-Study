@@ -51,9 +51,9 @@ public class UserDaoTest2 {
 //				"jdbc:mysql://localhost/testdb?serverTimezone=UTC&useSSL=false", "spring", "book", true);
 //		dao.setDataSource(dataSource);
 		
-		user1 = new User("gyumee", "심세용", "springno1",Level.BASIC,1,0);
-		user2 = new User("leggw700", "심네용", "springno2",Level.SILVER,55,10);
-		user3 = new User("bumjin", "심오용", "springno3",Level.GOLD,100,40);
+		user1 = new User("gyumee", "심세용", "springno1",Level.BASIC,1,0,"gyumee@naver.com");
+		user2 = new User("leggw700", "심네용", "springno2",Level.SILVER,55,10,"leggw700@naver.com");
+		user3 = new User("bumjin", "심오용", "springno3",Level.GOLD,100,40,"bumjin@naver.com");
 		
 	}
 
@@ -179,6 +179,7 @@ public class UserDaoTest2 {
 		user1.setLevel(Level.GOLD);
 		user1.setLogin(1000);
 		user1.setRecommend(999);
+		user1.setEmail("after@naver.com");
 		dao.update(user1);
 		
 		User user1update = dao.get(user1.getId());

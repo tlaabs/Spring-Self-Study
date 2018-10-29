@@ -27,17 +27,24 @@
 	<bean id="levelPolicy"
 		class="springbook.user.service.CommonUserLevelUpgradePolicy" />
 
+	<bean id="mailSender"
+		class="springbook.user.service.DummyMailSender" />
+		
 	<bean id="userService" class="springbook.user.service.UserService">
 		<property name="userDao" ref="userDao" />
 		<property name="dataSource" ref="dataSource" />
 		<property name="levelPolicy" ref="levelPolicy" />
 		<property name="transactionManager" ref="transactionManager" />
+		<property name="mailSender" ref="mailSender" />
 	</bean>
 
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+
+	<!-- <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
+		<property name="host" value="mail.server.com" /> </bean> -->
 
 
 </beans>

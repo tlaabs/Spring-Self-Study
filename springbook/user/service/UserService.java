@@ -1,17 +1,11 @@
 package springbook.user.service;
 
 import java.util.List;
-import java.util.Properties;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.sql.DataSource;
 
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -33,6 +27,12 @@ public class UserService {
 	private PlatformTransactionManager transactionManager;
 
 	UserLevelUpgradePolicy levelPolicy;
+	
+	private MailSender mailSender;
+	
+	public void setMailSender(MailSender mailSender) {
+		this.mailSender = mailSender;
+	}
 
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
@@ -97,27 +97,41 @@ public class UserService {
 	}
 
 	private void sendUpgradeEMail(User user) {
-		Properties props = new Properties();
-		props.put("mail.smtp.host", "mail.ksug.org");
-		Session s = Session.getInstance(props);
-		
-		MimeMessage message = new MimeMessage(s);
-		try {
-			message.setFrom(new InternetAddress("useradmin@ksug.org"));
-			message.addRecipient(Message.RecipientType.TO, 
-					new InternetAddress(user.getEmail()));
-			message.setSubject("Ugrade 안내");
-			message.setText("사용자님의 등급이 " + user.getLevel().name() + "로 업그레이드되었습니다.");
-			
-			Transport.send(message);
-		}catch(AddressException e) {
-			throw new RuntimeException(e);
-		}catch(MessagingException e) {
-			throw new RuntimeException(e);	
-		}
+//		Properties props = new Properties();
+//		props.put("mail.smtp.host", "mail.ksug.org");
+//		Session s = Session.getInstance(props);
+//		
+//		MimeMessage message = new MimeMessage(s);
+//		try {
+//			message.setFrom(new InternetAddress("useradmin@ksug.org"));
+//			message.addRecipient(Message.RecipientType.TO, 
+//					new InternetAddress(user.getEmail()));
+//			message.setSubject("Ugrade 안내");
+//			message.setText("사용자님의 등급이 " + user.getLevel().name() + "로 업그레이드되었습니다.");
+//			
+//			Transport.send(message);
+//		}catch(AddressException e) {
+//			throw new RuntimeException(e);
+//		}catch(MessagingException e) {
+//			throw new RuntimeException(e);	
+//		}
 //		}catch(UnsupportedEncodingException e) {
 //			throw new RuntimeException(e);
 //		}
+		
+		//JavaMail의 서비스 추상화 인터페이스 사용
+		//JavaMailSender는 MailSender 인터페이스를 구현한 클래스
+		//DI를 통해 아래 두줄이 없어짐.
+//		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+//		mailSender.setHost("mail.server.com");
+		
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(user.getEmail());
+		mailMessage.setFrom("useradmin@ksug.org");
+		mailMessage.setSubject("Upgrade 안내");
+		mailMessage.setText("사용자님의 등급이 " + user.getLevel().name());
+		
+		this.mailSender.send(mailMessage);
 	}
 
 }

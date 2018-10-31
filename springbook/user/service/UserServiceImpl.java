@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService{
 
 //	private DataSource dataSource;
 
-	UserLevelUpgradePolicy levelPolicy;
+//	UserLevelUpgradePolicy levelPolicy;
 	
 	private MailSender mailSender;
 	
@@ -31,9 +31,9 @@ public class UserServiceImpl implements UserService{
 		this.userDao = userDao;
 	}
 
-	public void setLevelPolicy(UserLevelUpgradePolicy levelPolicy) {
-		this.levelPolicy = levelPolicy;
-	}
+//	public void setLevelPolicy(UserLevelUpgradePolicy levelPolicy) {
+//		this.levelPolicy = levelPolicy;
+//	}
 
 //	public void setDataSource(DataSource dataSource) {
 //		this.dataSource = dataSource;
@@ -57,15 +57,25 @@ public class UserServiceImpl implements UserService{
 				upgradeLevel(user);
 			}
 		}
-	}
-	
+	}	
 
 	private boolean canUpgradeLevel(User user) {
-		return levelPolicy.canUpgradeLevel(user);
+		Level currentLevel = user.getLevel();
+		switch (currentLevel) {
+		case BASIC:
+			return (user.getLogin() >= MIN_LOGCOUNT_FOR_SILVER);
+		case SILVER:
+			return (user.getRecommend() >= MIN_RECOMMEND_FOR_GOLD);
+		case GOLD:
+			return false;
+		default:
+			throw new IllegalArgumentException("Unknown Level: " + currentLevel);
+		}
 	}
 
 	protected void upgradeLevel(User user) {
-		levelPolicy.upgradeLevel(user);
+//		levelPolicy.upgradeLevel(user);
+		user.upgradeLevel();
 		userDao.update(user);
 		sendUpgradeEMail(user);
 	}

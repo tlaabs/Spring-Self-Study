@@ -44,7 +44,9 @@
 	<bean id="userServiceImpl" class="springbook.user.service.UserServiceImpl">
 		<property name="userDao" ref="userDao"/>
 		<property name="mailSender" ref="mailSender"/>
+		<!--
 		<property name="levelPolicy" ref="levelPolicy"/>
+		 -->
 	</bean>
 
 	<bean id="transactionManager"

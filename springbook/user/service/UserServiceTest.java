@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import static springbook.user.service.UserServiceImpl.MIN_LOGCOUNT_FOR_SILVER;
 import static springbook.user.service.UserServiceImpl.MIN_RECOMMEND_FOR_GOLD;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,6 +53,59 @@ public class UserServiceTest {
 	
 	List<User> users;
 	
+	static class MockUserDao implements UserDao{
+		private List<User> users;
+		private List<User> updated = new ArrayList();
+		
+		private MockUserDao(List<User> users) {
+			this.users = users;
+		}
+		
+		public List<User> getUpdated(){
+			return this.updated;
+		}
+
+		@Override
+		public List<User> getAll() {
+			// TODO Auto-generated method stub
+			return this.users;
+		}
+
+		@Override
+		public void update(User user) {
+			// TODO Auto-generated method stub
+			updated.add(user);
+		}
+
+		@Override
+		public void add(User user) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public User get(String id) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void deleteAll() {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException();
+		}
+		
+			
+		
+	}
+
+	
 	@Before
 	public void setUp() {
 		users = Arrays.asList(
@@ -70,26 +124,43 @@ public class UserServiceTest {
 	@Test
 	@DirtiesContext //컨텍스트의 DI 설정을 변경하는 테스트라는 것을 알려준다.
 	public void upgradeLevels() throws Exception{
-		userDao.deleteAll();
-		for(User user : users) userDao.add(user);
+
+		UserServiceImpl userServiceImpl = new UserServiceImpl();
+		
+		MockUserDao mockUserDao = new MockUserDao(this.users);
+		userServiceImpl.setUserDao(mockUserDao);
+		
+//		CommonUserLevelUpgradePolicy policy = new CommonUserLevelUpgradePolicy();
+//		policy.setUserDao(mockUserDao);
+//		userServiceImpl.setLevelPolicy(policy);
 		
 		//목 오브젝트
 		MockMailSender mockMailSender = new MockMailSender();
 		userServiceImpl.setMailSender(mockMailSender);
 		
-		userService.upgradeLevels();
+		userServiceImpl.upgradeLevels();
 		
-		checkLevelUpgraded(users.get(0), false);
-		checkLevelUpgraded(users.get(1), true);
-		checkLevelUpgraded(users.get(2), false);
-		checkLevelUpgraded(users.get(3), true);
-		checkLevelUpgraded(users.get(4), false);
+		//Mock 오브젝트이므로 실제 db에 적용되지않는다.
+		List<User> updated = mockUserDao.getUpdated();
+		assertThat(updated.size(), is(2));
+		checkUserAndLevel(updated.get(0), "joytouch", Level.SILVER);
+		checkUserAndLevel(updated.get(1), "madnite1", Level.GOLD);
+//		checkLevelUpgraded(users.get(0), false);
+//		checkLevelUpgraded(users.get(1), true);
+//		checkLevelUpgraded(users.get(2), false);
+//		checkLevelUpgraded(users.get(3), true);
+//		checkLevelUpgraded(users.get(4), false);
 		
 		List<String> request = mockMailSender.getRequests();
 		assertThat(request.size(), is(2));
 		assertThat(request.get(0), is(users.get(1).getEmail()));
 		assertThat(request.get(1), is(users.get(3).getEmail()));
 		
+	}
+	
+	private void checkUserAndLevel(User updated, String expectedId, Level expectedLevel) {
+		assertThat(updated.getId(), is(expectedId));
+		assertThat(updated.getLevel(), is(expectedLevel));
 	}
 	
 //	private void checkLevel(User user, Level expectedLevel) {
@@ -132,9 +203,9 @@ public class UserServiceTest {
 	public void upgradeAllOrNothing() throws Exception{
 		TestUserService testUserService = new TestUserService(users.get(3).getId());
 		testUserService.setUserDao(this.userDao);
-		CommonUserLevelUpgradePolicy policy = new CommonUserLevelUpgradePolicy();
-		policy.setUserDao(userDao);
-		testUserService.setLevelPolicy(policy);
+//		CommonUserLevelUpgradePolicy policy = new CommonUserLevelUpgradePolicy();
+//		policy.setUserDao(userDao);
+//		testUserService.setLevelPolicy(policy);
 //		testUserService.setDataSource(this.dataSource);
 //		testUserService.setTransactionManager(transactionManager);
 		testUserService.setMailSender(mailSender);

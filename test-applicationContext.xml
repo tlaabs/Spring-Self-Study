@@ -29,13 +29,22 @@
 
 	<bean id="mailSender"
 		class="springbook.user.service.DummyMailSender" />
-		
-	<bean id="userService" class="springbook.user.service.UserService">
-		<property name="userDao" ref="userDao" />
-		<property name="dataSource" ref="dataSource" />
-		<property name="levelPolicy" ref="levelPolicy" />
-		<property name="transactionManager" ref="transactionManager" />
-		<property name="mailSender" ref="mailSender" />
+
+	<!-- 트랜잭션 경계 설정 분리로 userService가 두개로 나눠짐 <bean id="userService" class="springbook.user.service.UserService"> 
+		<property name="userDao" ref="userDao" /> <property name="dataSource" ref="dataSource" 
+		/> <property name="levelPolicy" ref="levelPolicy" /> <property name="transactionManager" 
+		ref="transactionManager" /> <property name="mailSender" ref="mailSender" 
+		/> </bean> -->
+	<bean id="userService"
+		class="springbook.user.service.UserServiceTx">
+		<property name="transactionManager" ref="transactionManager"/>
+		<property name="userService" ref="userServiceImpl"/>
+	</bean>
+	
+	<bean id="userServiceImpl" class="springbook.user.service.UserServiceImpl">
+		<property name="userDao" ref="userDao"/>
+		<property name="mailSender" ref="mailSender"/>
+		<property name="levelPolicy" ref="levelPolicy"/>
 	</bean>
 
 	<bean id="transactionManager"

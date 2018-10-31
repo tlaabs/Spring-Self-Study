@@ -3,7 +3,7 @@ package springbook.user.service;
 import springbook.user.dao.User;
 
 //트랜잭션 테스트용
-public class TestUserService extends UserService{
+public class TestUserService extends UserServiceImpl{
 	
 	static class TestUserServiceException extends RuntimeException{
 

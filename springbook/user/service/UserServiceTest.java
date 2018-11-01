@@ -1,9 +1,15 @@
 package springbook.user.service;
 
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static springbook.user.service.UserServiceImpl.MIN_LOGCOUNT_FOR_SILVER;
 import static springbook.user.service.UserServiceImpl.MIN_RECOMMEND_FOR_GOLD;
 
@@ -226,6 +232,32 @@ public class UserServiceTest {
 	
 		//업데이트가 안됬을 것이다. 예상
 		checkLevelUpgraded(users.get(1), false);
+		
+	}
+	
+	@Test
+	public void mockUpgradeLevels() throws Exception{
+		UserServiceImpl userServiceImpl = new UserServiceImpl();
+		
+		UserDao mockUserDao = mock(UserDao.class);
+		when(mockUserDao.getAll()).thenReturn(this.users);
+		userServiceImpl.setUserDao(mockUserDao);
+		
+		MailSender mockMailSender = mock(MailSender.class);
+		userServiceImpl.setMailSender(mockMailSender);
+		
+		userServiceImpl.upgradeLevels();
+		
+		//any : 파라미터 내용은 무시하고 호출 횟수 확인 가능
+		verify(mockUserDao, times(2)).update(any(User.class));
+//		verify(mockUserDao, times(2)).update((User) any(User.class));
+		//users.get(1)을 파라미터로 update()가 호출된 적이 있는지를 확인해준다.
+		verify(mockUserDao).update(users.get(1));
+		assertThat(users.get(1).getLevel(), is(Level.SILVER));
+		verify(mockUserDao).update(users.get(3));
+		assertThat(users.get(3).getLevel(), is(Level.GOLD));
+		
+		
 		
 	}
 }

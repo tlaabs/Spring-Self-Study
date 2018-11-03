@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import org.junit.Test;
 
@@ -45,5 +46,17 @@ public class ReflectionTest {
 		assertThat(proxiedHello.sayHi("Toby"), is("HI TOBY"));
 		assertThat(proxiedHello.sayThankYou("Toby"), is("THANK YOU TOBY"));
 		
+	}
+	
+	@Test
+	public void dynamicProxy() {
+		Hello proxiedHello = (Hello)Proxy.newProxyInstance(
+				getClass().getClassLoader(), //클래스로더??
+				new Class[] {Hello.class},
+				new UppercaseHandler(new HelloTarget()));
+		
+		assertThat(proxiedHello.sayHello("Toby"), is("HELLO TOBY"));
+		assertThat(proxiedHello.sayHi("Toby"), is("HI TOBY"));
+		assertThat(proxiedHello.sayThankYou("Toby"), is("THANK YOU TOBY"));
 	}
 }

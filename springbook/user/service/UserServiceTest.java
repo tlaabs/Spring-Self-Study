@@ -13,7 +13,6 @@ import static org.mockito.Mockito.when;
 import static springbook.user.service.UserServiceImpl.MIN_LOGCOUNT_FOR_SILVER;
 import static springbook.user.service.UserServiceImpl.MIN_RECOMMEND_FOR_GOLD;
 
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,13 +23,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailSender;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import springbook.learningtest.jdk.TransactionHandler;
 import springbook.user.dao.Level;
 import springbook.user.dao.User;
 import springbook.user.dao.UserDao;
@@ -39,6 +38,8 @@ import springbook.user.service.TestUserService.TestUserServiceException;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="/test-applicationContext.xml")
 public class UserServiceTest {
+	
+	@Autowired ApplicationContext context;
 	
 	//Autowired는 기본적으로 타입을 이용해 빈을 찾지만 만약 타입으로 하나의 빈을 결정할 수 없는 경우에는 필드 이름을 이용한다.
 	@Autowired
@@ -208,6 +209,7 @@ public class UserServiceTest {
 	
 //	모 아니면 도
 	@Test
+	@DirtiesContext
 	public void upgradeAllOrNothing() throws Exception{
 		TestUserService testUserService = new TestUserService(users.get(3).getId());
 		testUserService.setUserDao(this.userDao);
@@ -222,13 +224,17 @@ public class UserServiceTest {
 //		txUserService.setTransactionManager(transactionManager);
 //		txUserService.setUserService(testUserService);
 		
-		TransactionHandler txHandler = new TransactionHandler();
-		txHandler.setTarget(testUserService);
-		txHandler.setTransactionManager(transactionManager);
-		txHandler.setPattern("upgradeLevels");
-		UserService txUserService = (UserService)Proxy.newProxyInstance(getClass().getClassLoader(),
-				new Class[] {UserService.class},
-				txHandler);
+//		TransactionHandler txHandler = new TransactionHandler();
+//		txHandler.setTarget(testUserService);
+//		txHandler.setTransactionManager(transactionManager);
+//		txHandler.setPattern("upgradeLevels");
+//		UserService txUserService = (UserService)Proxy.newProxyInstance(getClass().getClassLoader(),
+//				new Class[] {UserService.class},
+//				txHandler);
+		
+		TxProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", TxProxyFactoryBean.class);
+		txProxyFactoryBean.setTarget(testUserService);
+		UserService txUserService = (UserService) txProxyFactoryBean.getObject();
 		
 		userDao.deleteAll();
 		for(User user : users) userDao.add(user);

@@ -50,7 +50,7 @@ public class TransactionHandler implements InvocationHandler{
 			return ret;
 		} catch (InvocationTargetException e) {
 			this.transactionManager.rollback(status);
-			throw e.getTargetException();
+			throw e.getTargetException(); //중첩된 예외 가져오기
 		}
 	}
 		

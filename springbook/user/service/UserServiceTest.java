@@ -143,8 +143,7 @@ public class UserServiceTest {
 //		CommonUserLevelUpgradePolicy policy = new CommonUserLevelUpgradePolicy();
 //		policy.setUserDao(mockUserDao);
 //		userServiceImpl.setLevelPolicy(policy);
-		
-//목 오브젝트
+		//목 오브젝트
 		MockMailSender mockMailSender = new MockMailSender();
 		userServiceImpl.setMailSender(mockMailSender);
 		

@@ -22,6 +22,7 @@ import javax.sql.DataSource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailSender;
@@ -232,7 +233,12 @@ public class UserServiceTest {
 //				new Class[] {UserService.class},
 //				txHandler);
 		
-		TxProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", TxProxyFactoryBean.class);
+//		TxProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", TxProxyFactoryBean.class);
+//		txProxyFactoryBean.setTarget(testUserService);
+//		UserService txUserService = (UserService) txProxyFactoryBean.getObject();
+		
+		ProxyFactoryBean txProxyFactoryBean =
+				context.getBean("&userService",ProxyFactoryBean.class);
 		txProxyFactoryBean.setTarget(testUserService);
 		UserService txUserService = (UserService) txProxyFactoryBean.getObject();
 		
@@ -248,6 +254,8 @@ public class UserServiceTest {
 	
 		//업데이트가 안됬을 것이다. 예상
 		checkLevelUpgraded(users.get(1), false);
+		
+		
 		
 	}
 	

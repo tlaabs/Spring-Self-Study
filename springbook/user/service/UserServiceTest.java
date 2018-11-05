@@ -273,7 +273,6 @@ public class UserServiceTest {
 		verify(mockUserDao).update(users.get(3));
 		assertThat(users.get(3).getLevel(), is(Level.GOLD));
 		
-		
-		
 	}
+
 }

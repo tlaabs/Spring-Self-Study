@@ -40,7 +40,8 @@
 		ref="transactionManager" /> <property name="pattern" value="upgradeLevels"></property> 
 		<property name="serviceInterface" value="springbook.user.service.UserService" 
 		/> </bean> -->
-
+		
+	<!--
 	<bean id="userService"
 		class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target" ref="userServiceImpl" />
@@ -50,14 +51,18 @@
 			</list>
 		</property>
 	</bean>
-
-	<bean id="userServiceImpl"
+ -->
+	<bean id="userService"
 		class="springbook.user.service.UserServiceImpl">
 		<property name="userDao" ref="userDao" />
 		<property name="mailSender" ref="mailSender" />
 		<!-- <property name="levelPolicy" ref="levelPolicy"/> -->
 	</bean>
-
+	
+		<bean id="testUserService"
+	class="springbook.user.service.UserServiceTest$TestUserServiceImpl"
+	parent="userService"/>
+	
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
@@ -68,8 +73,9 @@
 		<property name="transactionManager" ref="transactionManager" />
 	</bean>
 
-	<bean id="transactionPointcut"
-		class="org.springframework.aop.support.NameMatchMethodPointcut">
+	<bean id="transactionPointcut" class="springbook.user.service.NameMatchClassMethodPointcut">
+	<!-- class="org.springframework.aop.support.NameMatchMethodPointcut"> -->
+		<property name="mappedClassName" value="*ServiceImpl"/>
 		<property name="mappedName" value="upgrade*" />
 	</bean>
 
@@ -78,6 +84,8 @@
 		<property name="advice" ref="transactionAdvice" />
 		<property name="pointcut" ref="transactionPointcut" />
 	</bean>
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" />
 
 	<!-- <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
 		<property name="host" value="mail.server.com" /> </bean> -->

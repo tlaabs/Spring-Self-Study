@@ -22,7 +22,6 @@ import javax.sql.DataSource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailSender;
@@ -34,20 +33,23 @@ import org.springframework.transaction.PlatformTransactionManager;
 import springbook.user.dao.Level;
 import springbook.user.dao.User;
 import springbook.user.dao.UserDao;
-import springbook.user.service.TestUserService.TestUserServiceException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="/test-applicationContext.xml")
 public class UserServiceTest {
+	
+	
 	
 	@Autowired ApplicationContext context;
 	
 	//Autowired는 기본적으로 타입을 이용해 빈을 찾지만 만약 타입으로 하나의 빈을 결정할 수 없는 경우에는 필드 이름을 이용한다.
 	@Autowired
 	UserService userService;
-	
 	@Autowired
-	UserServiceImpl userServiceImpl;
+	UserService testUserService;
+	
+//	@Autowired
+//	UserServiceImpl userServiceImpl;
 	
 	@Autowired
 	DataSource dataSource;
@@ -62,6 +64,21 @@ public class UserServiceTest {
 	MailSender mailSender;
 	
 	List<User> users;
+	static class TestUserServiceException extends RuntimeException{}
+	
+	static class TestUserServiceImpl extends UserServiceImpl{
+
+		private String id = "madnite1";
+
+		@Override
+		protected void upgradeLevel(User user) {
+			// TODO Auto-generated method stub
+			if(user.getId().equals(this.id)) throw new TestUserServiceException();
+			super.upgradeLevel(user);
+		}
+		
+	}
+
 	
 	static class MockUserDao implements UserDao{
 		private List<User> users;
@@ -211,14 +228,14 @@ public class UserServiceTest {
 	@Test
 	@DirtiesContext
 	public void upgradeAllOrNothing() throws Exception{
-		TestUserService testUserService = new TestUserService(users.get(3).getId());
-		testUserService.setUserDao(this.userDao);
+//		TestUserServiceImpl testUserService = new TestUserServiceImpl(users.get(3).getId());
+//		testUserService.setUserDao(this.userDao);
 //		CommonUserLevelUpgradePolicy policy = new CommonUserLevelUpgradePolicy();
 //		policy.setUserDao(userDao);
 //		testUserService.setLevelPolicy(policy);
 //		testUserService.setDataSource(this.dataSource);
 //		testUserService.setTransactionManager(transactionManager);
-		testUserService.setMailSender(mailSender);
+//		testUserService.setMailSender(mailSender);
 		
 //		UserServiceTx txUserService = new UserServiceTx();
 //		txUserService.setTransactionManager(transactionManager);
@@ -236,16 +253,16 @@ public class UserServiceTest {
 //		txProxyFactoryBean.setTarget(testUserService);
 //		UserService txUserService = (UserService) txProxyFactoryBean.getObject();
 		
-		ProxyFactoryBean txProxyFactoryBean =
-				context.getBean("&userService",ProxyFactoryBean.class);
-		txProxyFactoryBean.setTarget(testUserService);
-		UserService txUserService = (UserService) txProxyFactoryBean.getObject();
+//		ProxyFactoryBean txProxyFactoryBean =
+//				context.getBean("&userService",ProxyFactoryBean.class);
+//		txProxyFactoryBean.setTarget(testUserService);
+//		UserService txUserService = (UserService) txProxyFactoryBean.getObject();
 		
 		userDao.deleteAll();
 		for(User user : users) userDao.add(user);
 		
 		try {
-			txUserService.upgradeLevels();
+			this.testUserService.upgradeLevels();
 			fail("TestUserServiceException expected");
 		}
 		catch(TestUserServiceException e) {

@@ -298,5 +298,10 @@ public class UserServiceTest {
 		assertThat(users.get(3).getLevel(), is(Level.GOLD));
 		
 	}
+	
+	@Test
+	public void advisorAutoProxyCreator() {
+		assertThat(testUserService, is(java.lang.reflect.Proxy.class));
+	}
 
 }

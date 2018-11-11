@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.mail.MailSender;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -76,6 +77,18 @@ public class UserServiceTest {
 			if(user.getId().equals(this.id)) throw new TestUserServiceException();
 			super.upgradeLevel(user);
 		}
+		
+		//트랜잭션 read-only 테스트를 위해 강제 오버라이드
+		@Override
+		public List<User> getAll() {
+			// TODO Auto-generated method stub
+			for(User user : super.getAll()) {
+				super.update(user);
+			}
+			return null;
+		}
+		
+			
 		
 	}
 
@@ -302,6 +315,11 @@ public class UserServiceTest {
 	@Test
 	public void advisorAutoProxyCreator() {
 		assertThat(testUserService, is(java.lang.reflect.Proxy.class));
+	}
+	
+	@Test(expected=TransientDataAccessResourceException.class)
+	public void readOnlyTransactionAttribute() {
+		testUserService.getAll();
 	}
 
 }

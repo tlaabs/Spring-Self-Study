@@ -30,7 +30,8 @@ public class UserServiceImpl implements UserService{
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
 	}
-
+	
+		
 //	public void setLevelPolicy(UserLevelUpgradePolicy levelPolicy) {
 //		this.levelPolicy = levelPolicy;
 //	}
@@ -39,6 +40,30 @@ public class UserServiceImpl implements UserService{
 //		this.dataSource = dataSource;
 //	}
 	
+	@Override
+	public User get(String id) {
+		// TODO Auto-generated method stub
+		return userDao.get(id);
+	}
+
+	@Override
+	public List<User> getAll() {
+		// TODO Auto-generated method stub
+		return userDao.getAll();
+	}
+
+	@Override
+	public void deleteAll() {
+		// TODO Auto-generated method stub
+		userDao.deleteAll();
+	}
+
+	@Override
+	public void update(User user) {
+		// TODO Auto-generated method stub
+		userDao.update(user);
+	}
+
 	// Policy 적용
 	public void upgradeLevels(){
 		/**

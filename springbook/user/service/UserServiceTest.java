@@ -329,7 +329,18 @@ public class UserServiceTest {
 		finally {
 			transactionManager.rollback(txStatus);
 		}
-
 	}
-
+	/*
+	 * 
+	 * http://mspark7233.blogspot.com/2012/12/spring3-ibatis-transactional-error.html
+	 * 테스트에서의 @Transactional 설정이 왜안되지?
+	/**
+	@Test
+	@Transactional
+	public void transactionSync2() {
+		userService.deleteAll();
+		userService.add(users.get(0));
+		userService.add(users.get(1));
+	}
+	*/
 }

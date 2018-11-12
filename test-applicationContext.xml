@@ -81,23 +81,29 @@
 	<!-- <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
 		<property name="host" value="mail.server.com" /> </bean> -->
 
+<!-- 
 	<aop:config>
 		<aop:advisor advice-ref="transactionAdvice"
 			pointcut="bean(*Service)" />
 	</aop:config>
-
+ -->
+ 
 	<!-- <bean id="transactionAdvice" class="org.springframework.transaction.interceptor.TransactionInterceptor"> 
 		<property name="transationManager" ref="transactionManager" /> <property 
 		name="transactionAttributes"> <props> <prop key="get*">PROPAGATION_REQUIRED, 
 		readOnly</prop> <prop key="*">PROPAGATION_REQUIRED</prop> </props> </property> 
 		</bean> -->
-		
+	
+	<!-- 
 	<tx:advice id="transactionAdvice">
 		<tx:attributes>
 			<tx:method name="get*" read-only="true" />
 			<tx:method name="*" />
 		</tx:attributes>
 	</tx:advice>
+	 -->
+	
+	<tx:annotation-driven/>
 
 
 </beans>

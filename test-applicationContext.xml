@@ -16,7 +16,16 @@
 
 	<bean id="userDao" class="springbook.user.dao.UserDaoJdbc">
 		<property name="dataSource" ref="dataSource" />
-
+		<property name="sqlService" ref="sqlService"></property>
+	</bean>
+	
+	<bean id="sqlService" class="springbook.user.dao.SimpleSqlService">
+	<property name="sqlMap">
+		<map>
+		<entry key="userAdd" value="insert into users(id, name, password,
+		 level, login, recommend, email) values(?,?,?,?,?,?,?)"/>
+		</map>
+		</property>
 	</bean>
 
 	<bean id="dataSource"

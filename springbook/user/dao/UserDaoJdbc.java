@@ -12,6 +12,12 @@ import org.springframework.jdbc.core.RowMapper;
 public class UserDaoJdbc implements UserDao{
 
 	private JdbcTemplate jdbcTemplate;
+	
+	private SqlService sqlService;
+	
+	public void setSqlService(SqlService sqlService) {
+		this.sqlService = sqlService;
+	}
 
 	//ResultSet의 row를 조회하여 유저정보를 User 클래스에 담아서 리턴함.
 	private RowMapper<User> userMapper = new RowMapper<User>() {
@@ -43,8 +49,7 @@ public class UserDaoJdbc implements UserDao{
 	}
 
 	public void add(User user){
-		this.jdbcTemplate.update("insert into users(id, name, password, level, login, recommend, email) "
-				+ "values(?,?,?,?,?,?,?)", user.getId(), user.getName(),
+		this.jdbcTemplate.update(this.sqlService.getSql("userAdd"), user.getId(), user.getName(),
 				user.getPassword(), user.getLevel().intValue(),
 				user.getLogin(), user.getRecommend(), user.getEmail());
 		//getLevel은 Enum 타입, DB에 저장될 수 있는 SQL 타입이 아니므로 정수형으로 변환해줘야 한다.

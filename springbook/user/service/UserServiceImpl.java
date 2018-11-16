@@ -16,7 +16,6 @@ public class UserServiceImpl implements UserService{
 	public static final int MIN_RECOMMEND_FOR_GOLD = 30;
 	// @Autowired 대신 수정자 메서드를 통한 DI
 	UserDao userDao;
-
 //	private DataSource dataSource;
 
 //	UserLevelUpgradePolicy levelPolicy;

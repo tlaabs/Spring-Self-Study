@@ -17,7 +17,6 @@ public class UserServiceImpl implements UserService{
 	// @Autowired 대신 수정자 메서드를 통한 DI
 	UserDao userDao;
 //	private DataSource dataSource;
-
 //	UserLevelUpgradePolicy levelPolicy;
 	
 	private MailSender mailSender;

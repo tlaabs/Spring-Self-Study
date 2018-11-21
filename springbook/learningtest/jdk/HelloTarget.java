@@ -13,7 +13,6 @@ public class HelloTarget implements Hello{
 		// TODO Auto-generated method stub
 		return "Hi " + name;
 	}
-
 	@Override
 	public String sayThankYou(String name) {
 		// TODO Auto-generated method stub
